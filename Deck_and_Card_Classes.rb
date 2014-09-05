@@ -56,11 +56,9 @@ class Deck
   #   return boolean
   # end
 
-  # def end_of_game?
-  #   if active card.played_count > 0
-  # return true
-  #   else false
-  # end
+  def end_of_game?
+    cards[0].played_count > 0
+  end
 end
 
 my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
