@@ -1,11 +1,12 @@
-# class Card
-#   attr_reader :question, :answer, :played_count
-#   def initialize(question,answer)
-#     @question = question
-#     @answer = answer
-#     @played_count = 0
-#   end
-# end
+class Card
+  attr_reader :question, :answer, :played_count, :guesses
+  def initialize(question,answer)
+    @question = question
+    @answer = answer
+    @played_count = 0
+    @guesses = 0
+  end
+end
 
 class Deck
   attr_reader :deck_name, :file
@@ -20,28 +21,22 @@ class Deck
   def parse_txt_file()
     parsed_file = File.open(file)
     parsed_file.each_slice(3) do |lines|
-      cards << Card.new(lines[0].delete("\n"),lines[1].delete("\n"))
+      add_card(lines[0].delete("\n"),lines[1].delete("\n"))
+    end
   end
 
-    p cards
-    p cards.length
-    # parsed_file.close
-    # parsed_file.class
-    # p parsed_file
+  def shuffle
+    cards.shuffle
   end
 
-  # def shuffle
-  #   cards.shuffle
-  # end
+  def grab_a_card
+    cards[0].played_count += 1
+    return cards[0].answer, cards[0].question
+  end
 
-  # def grab_a_card
-  #   increase card.played_count
-  #   return .answer/.question strings of the next not played card in .card
-  # end
-
-
-  # def add_card
-  # end
+  def add_card(question, answer)
+    cards << Card.new(question, answer)
+  end
 
   # def check_num_correct
   # going through card array and counting how many cards are correct
@@ -68,6 +63,6 @@ class Deck
   # end
 end
 
-# my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
+my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
 
 
