@@ -2,12 +2,13 @@ require 'pry'
 
 class Card
   attr_reader :question, :answer
-  attr_accessor :played_count, :guesses
+  attr_accessor :played_count, :guesses, :is_correct
   def initialize(question,answer)
     @question = question
     @answer = answer
     @played_count = 0
     @guesses = 0
+    @is_correct = false
   end
 end
 
@@ -37,13 +38,15 @@ class Deck
     return cards[0].answer, cards[0].question
   end
 
-  def add_card(question, answer)
-    cards << Card.new(question, answer)
+  def get_num_correct
+    correct = cards.select {|card| card.is_correct}
+    correct.length
   end
 
-  # def check_num_correct
-  # going through card array and counting how many cards are correct
-  # end
+  def get_num_incorrect
+    incorrect = cards.select {|card| card.is_correct == false && card.played_count >= 1}
+    incorrect.length
+  end
 
   def can_proceed?(guess)
     increase_guesses
@@ -58,6 +61,15 @@ class Deck
     end
   end
 
+  def end_of_game?
+    cards[0].played_count > 0
+  end
+
+  private
+  def add_card(question, answer)
+    cards << Card.new(question, answer)
+  end
+
   def check_num_guesses
     cards[0].guesses > 2
   end
@@ -67,12 +79,13 @@ class Deck
   end
 
   def check_answer_correct(guess)
-    cards[0].answer == guess
+    if cards[0].answer == guess
+      cards[0].is_correct = true
+    else
+      false
+    end
   end
 
-  def end_of_game?
-    cards[0].played_count > 0
-  end
 end
 
 
