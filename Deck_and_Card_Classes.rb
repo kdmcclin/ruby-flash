@@ -1,5 +1,8 @@
+require 'pry'
+
 class Card
-  attr_reader :question, :answer, :played_count, :guesses
+  attr_reader :question, :answer
+  attr_accessor :played_count, :guesses
   def initialize(question,answer)
     @question = question
     @answer = answer
@@ -26,7 +29,7 @@ class Deck
   end
 
   def shuffle
-    cards.shuffle
+    cards.shuffle!
   end
 
   def grab_a_card
@@ -42,25 +45,42 @@ class Deck
   # going through card array and counting how many cards are correct
   # end
 
-  # def check_can_proceed?
-  #   call check_num_guesses
-  #   call check_answer_correct
-  #   return (correct, too_many_guesses, incorrect)
-  # end
+  def can_proceed?(guess)
+    increase_guesses
+    if check_answer_correct(guess)
+      cards.rotate!
+      :correct
+    elsif check_num_guesses
+      cards.rotate!
+      :too_many_guesses
+    else
+      :incorrect
+    end
+  end
 
-  # def check_num_guesses
-  #   returns an integer
-  # end
+  def check_num_guesses
+    cards[0].guesses > 2
+  end
 
-  # def check_answer_correct
-  #   return boolean
-  # end
+  def increase_guesses
+    cards[0].guesses += 1
+  end
+
+  def check_answer_correct(guess)
+    cards[0].answer == guess
+  end
 
   def end_of_game?
     cards[0].played_count > 0
   end
 end
 
+
 my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
+binding.pry
+# p my_deck.cards
+# puts "======================================"
+# puts my_deck.grab_a_card
+# puts "======================================"
 
 
