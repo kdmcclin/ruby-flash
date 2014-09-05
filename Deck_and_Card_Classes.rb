@@ -62,7 +62,7 @@ class Deck
   end
 
   def end_of_game?
-    cards[0].played_count > 0
+    (get_num_correct + get_num_incorrect == cards.length) && (cards[0].is_correct || cards[0].guesses == 3)
   end
 
   private
@@ -89,8 +89,8 @@ class Deck
 end
 
 
-my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
-binding.pry
+# my_deck = Deck.new("Ruby Deck",'ruby_deck.txt')
+# binding.pry
 # p my_deck.cards
 # puts "======================================"
 # puts my_deck.grab_a_card
